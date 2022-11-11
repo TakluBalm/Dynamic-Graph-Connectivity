@@ -3,12 +3,11 @@ using namespace std;
 
 struct TreeNode{
 	TreeNode *parent, *left, *right;
-	unsigned int size, height;
+	unsigned int size;
 	int data;
 	TreeNode(int data_){
 		parent = left = right = NULL;
 		size = 1;
-		height = 1;
 		data = data_;
 	}
 };
@@ -107,12 +106,14 @@ class SplayForest{
 
 				TreeNode* temp = t->right;
 				t->right = temp->parent = NULL;
+				t->size -= temp->size;
 				return temp;
 			}else{
 				if(t->left == NULL)	return NULL;
 
 				TreeNode* temp = t->left;
 				t->left = temp->parent = NULL;
+				t->size -= temp->size;
 				return temp;
 			}
 		}
@@ -122,6 +123,7 @@ class SplayForest{
 			t2 = findBSTRoot(t2);
 			splay(t1);
 			t1->right = t2;
+			t1->size += t2->size;
 			return t1;
 		}
 
