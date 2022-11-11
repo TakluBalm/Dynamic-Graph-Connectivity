@@ -1,25 +1,39 @@
 #include <bits/stdc++.h>
-#include "spanning_forest.cpp"
+#include "SpanningForest.cpp"
 using namespace std;
 
 class Graph{
 	private:
+		class Node{
+			Node* next;
+			pair<int,int> e;
+			Node(pair<int,int> e_){
+				e = e_;
+				next = NULL;
+			}
+			Node(pair<int,int> e_, Node* n){
+				e = e_;
+				n = next;
+			}
+		};
+
 		map<pair<int,int>, int> edgeMap;
+		vector<Node*> treeEdge, nonTreeEdge;
 		int vertices;
 		int logn;
-		vector<Spanning_Forest> F;
+		vector<SpanningForest> F;
 	
 	public:
 		Graph(int n){
 			vertices = n;
 			logn = ceil(log2(n));
-			F = vector<Spanning_Forest>(logn);
+			F = vector<SpanningForest>(logn);
 		}
 
 		void addEdge(int u, int v){
 			if(u < vertices && v < vertices){
-				edgeMap[{u,v}] = logn;
 				edgeMap[{v,u}] = logn;
+				edgeMap[{u,v}] = logn;
 			}
 		}
 
@@ -40,4 +54,6 @@ class Graph{
 };
 
 int main(){
+	Graph g(10);
+	return 1;
 }
