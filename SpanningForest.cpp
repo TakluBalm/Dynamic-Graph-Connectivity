@@ -18,7 +18,8 @@ class SpanningForest{
 
 		SpanningForest(){}
 		
-		vector<int> getVertices(TreeNode* r){
+		vector<int> getVertices(int u){
+			TreeNode* r = vec[u].first;
 			vector<int> ver;
 		 	r = t.findBSTRoot(r);
 			queue<TreeNode*> q;
@@ -77,5 +78,9 @@ class SpanningForest{
 			}
 
 			t.merge(temp1, temp2);
+		}
+		int getSize(int u){
+			TreeNode* r = t.findBSTRoot(vec[u].first);
+			return r->size;
 		}
 };
