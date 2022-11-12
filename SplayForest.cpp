@@ -15,44 +15,50 @@ struct TreeNode{
 class SplayForest{
 	private:
 
+		void updateSize(TreeNode* t){
+			t->size = (t->right == NULL)?(0):(t->right->size) + (t->left == NULL)?(0):(t->left->size) + 1;
+		}
+
 		void right_rotate(TreeNode* n){
 			TreeNode* p = n->parent;
 			TreeNode* gp = p->parent;
 			if (gp != NULL) {
-				if (p == gp->right) {
+				if(p == gp->right){
 					gp->right = n;
-				}
-				else {
+				}else{
 					gp->left = n;
 				}
 			}
 			n->parent = gp;
 			p->parent = n;
 			p->right = n->left;
-			if (p->right != NULL) {
+			if(p->right != NULL){
 				p->right->parent = p;
 			}
 			n->left = p;
+			updateSize(p);
+			updateSize(n);
 		}
 
 		void left_rotate(TreeNode* n){
 			TreeNode* p = n->parent;
 			TreeNode* gp = p->parent;
-			if (gp != NULL) {
-				if (p == gp->right) {
+			if (gp != NULL){
+				if (p == gp->right){
 					gp->right = n;
-				}
-				else {
+				}else{
 					gp->left = n;
 				}
 			}
 			n->parent = gp;
 			p->parent = n;
 			p->left = n->right;
-			if (p->left != NULL) {
+			if(p->left != NULL){
 				p->left->parent = p;
 			}
 			n->right = p;
+			updateSize(p);
+			updateSize(n);
 		}
 
 		void splay(TreeNode* n){
@@ -60,30 +66,30 @@ class SplayForest{
 				TreeNode* p = n->parent;
 				TreeNode* gp = p->parent;
 
-				if (gp == NULL) {
-					if (n == p->left){
+				if(gp == NULL){
+					if(n == p->left){
 						right_rotate(n);
-					} else {
+					}else{
 						left_rotate(n);
 					}
 					break;
 				}
-				if (n == p->left) {
-					if (p == gp->left) {
+				if(n == p->left){
+					if(p == gp->left){
 						// zig-zig
 						right_rotate(p);
 						right_rotate(n);
-					} else {
+					}else{
 						// zig-zag
 						right_rotate(n);
 						left_rotate(n);
 					}
-					} else {
-						if (p == gp->left) {
+				}else{
+					if(p == gp->left){
 						// zag-zig
 						left_rotate(n);
 						right_rotate(n);
-					} else {
+					}else{
 						// zag-zag
 						left_rotate(p);
 						left_rotate(n);
@@ -97,6 +103,17 @@ class SplayForest{
 
 		TreeNode* insertNode(int val){
 			return new TreeNode(val);
+		}
+
+		TreeNode* getNext(TreeNode* t){
+			if(t->right != NULL)	return findLeftMost(t->right);
+			TreeNode* parent = t->parent;
+			while(parent != NULL){
+				if(t == parent->left)	return parent;
+				t = parent;
+				parent = t->parent;
+			}
+			return NULL;
 		}
 
 		TreeNode* split(TreeNode* t, bool right){

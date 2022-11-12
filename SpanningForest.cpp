@@ -2,6 +2,9 @@
 #include "SplayForest.cpp"
 using namespace std;
 
+#define RIGHT true
+#define LEFT false
+
 class SpanningForest{
 	private:
 		struct mpNode{
@@ -28,11 +31,26 @@ class SpanningForest{
 			return t.findBSTRoot(vec[u].first) == t.findBSTRoot(vec[v].first);
 		}
 
+		bool isPresent(int u, int v){
+			TreeNode* temp1 = t.getNext(vec[u].last), *temp2 = t.getNext(vec[v].last);
+			if((temp1 != NULL && temp1->data == v) || (temp2 != NULL && temp2->data == u))	return true;
+			return false;
+		}
+
 		void addEdge(int u, int v){
-			/*TODO*/
+			if(isPresent(u, v))	return;
+			TreeNode* temp = t.split(vec[u].last, RIGHT);
+			t.merge(vec[u].last, vec[v].first);
+			vec[u].last = t.insertNode(u);
+			t.merge(vec[u].first, vec[u].last);
+			t.merge(vec[u].first, temp);
 		}
 
 		void deleteEdge(int u, int v){
-			/*TODO*/
+			if(!isPresent(u,v))	return;
+			TreeNode* temp1 = t.split(vec[v].first, LEFT);
+			TreeNode* temp2 = t.split(vec[v].last, RIGHT);
+
+			t.merge(temp1, temp2);
 		}
 };
