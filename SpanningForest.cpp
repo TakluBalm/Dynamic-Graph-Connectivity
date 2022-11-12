@@ -67,8 +67,14 @@ class SpanningForest{
 
 		void deleteEdge(int u, int v){
 			if(!isPresent(u,v))	return;
+
 			TreeNode* temp1 = t.split(vec[v].first, LEFT);
-			TreeNode* temp2 = t.split(vec[v].last, RIGHT);
+			TreeNode* redundant = t.findLeftMost(t.split(vec[v].last, RIGHT));
+			TreeNode* temp2 = t.split(redundant, RIGHT);
+
+			if(redundant = vec[u].last){
+				vec[u].last = t.findRightMost(temp1);
+			}
 
 			t.merge(temp1, temp2);
 		}
