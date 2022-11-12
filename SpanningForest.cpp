@@ -13,10 +13,29 @@ class SpanningForest{
 		};
 		SplayForest t;
 		vector<mpNode> vec;
-
+		
 	public:
 
 		SpanningForest(){}
+		
+		vector<int> getVertices(TreeNode* r){
+			vector<int> ver;
+		 	r = t.findBSTRoot(r);
+			queue<TreeNode*> q;
+			q.push(r);
+			while(!q.empty()){
+				TreeNode* cur = q.front();
+				q.pop();
+				if(vec[cur->data].first == cur){
+					ver.push_back(cur->data);
+				}
+				if(cur->left!=NULL)
+					q.push(cur->left);
+				if(cur->right!=NULL)
+					q.push(cur->right);
+			}
+			return ver;
+		}
 
 		SpanningForest(int n){
 			vec.resize(n);

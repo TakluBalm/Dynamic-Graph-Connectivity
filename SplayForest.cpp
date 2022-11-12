@@ -162,4 +162,5 @@ class SplayForest{
 			while(t->left != NULL)	t = t->left;
 			return t;
 		}
+	
 };
