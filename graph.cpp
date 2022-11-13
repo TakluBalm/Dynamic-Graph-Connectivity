@@ -98,15 +98,25 @@ class Graph{
 				NonTreeEdge[level][u].erase(v);
 			}
 		}
+		void inorder(int u){
+			forest[logn].temp(u);
+		}
 };
 
 int main(){
 	Graph g(7);
-	g.insertEdge(1,6);
-	// g.insertEdge(2,6);
-	// g.insertEdge(1,2);
-	// if(g.isConnected(1,2)){
-	// 	cout<<"lesgo"<<endl;
-	// }
+	g.insertEdge(4,5);
+	g.insertEdge(2,1);
+	g.insertEdge(2,6);
+	g.inorder(1);
+	g.inorder(4);
+	g.insertEdge(5,1);
+	g.inorder(1);
+	if(g.isConnected(1,4)){
+		cout<<"lesgo"<<endl;
+	}
+	else{
+		cout<<"STILL LESGPO"<<endl;
+	}
 	return 1;
 }

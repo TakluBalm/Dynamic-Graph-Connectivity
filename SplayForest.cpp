@@ -4,11 +4,12 @@ using namespace std;
 struct TreeNode{
 	TreeNode *parent, *left, *right;
 	unsigned int size;
-	int data;
-	TreeNode(int data_){
+	int ver1,ver2;
+	TreeNode(int ver1_,int ver2_){
 		parent = left = right = NULL;
 		size = 1;
-		data = data_;
+		ver1 = ver1_;
+		ver2 = ver2_;
 	}
 };
 
@@ -101,8 +102,8 @@ class SplayForest{
 
 		SplayForest(){};
 
-		TreeNode* insertNode(int val){
-			return new TreeNode(val);
+		TreeNode* insertNode(int u,int v){
+			return new TreeNode(u,v);
 		}
 
 		TreeNode* getNext(TreeNode* t){
@@ -162,5 +163,6 @@ class SplayForest{
 			while(t->left != NULL)	t = t->left;
 			return t;
 		}
+		
 	
 };
