@@ -8,47 +8,64 @@ class Graph{
 		int logn;
 		vector<SpanningForest> forest;
 		map<pair<int,int>, int>	edge;
-		vector<map<int,set<int>>> TreeEdge;
-		vector<map<int,set<int>>> NonTreeEdge;
-		bool isTreeEdge(int u, int v,int level){
+		vector<vector<set<int>>> TreeEdge;
+		vector<vector<set<int>>> NonTreeEdge;
+
+		bool isTreeEdge(int u_, int v_, int level){
 			//	TODO
-			int u_ = min(u,v);
-			int v_ = max(u,v);
-			return TreeEdge[level][u_].find(v_)!=TreeEdge[level][u_].end();
+			int u = min(u_,v_);
+			int v = max(u_,v_);
+			return TreeEdge[level][u].find(v) != TreeEdge[level][u].end();
 		}
 
 	public:
 		Graph(){}
 
+		void printState(){
+			for(int i = 0; i <= logn; i++){
+				forest[i].print();
+			}
+			cout << endl;
+		}
+
 		Graph(int n){
 			vertices = n;
 			logn = floor(log2(n));
-			forest = vector<SpanningForest>(logn+1, SpanningForest(n));
-			TreeEdge = vector<map<int,set<int>>>(logn+1);
-			NonTreeEdge = vector<map<int,set<int>>>(logn+1);
+			forest = vector<SpanningForest>(logn+1);
+			for(int i = 0; i <= logn; i++){
+				forest[i] = SpanningForest(n);
+			}
+			TreeEdge = vector<vector<set<int>>>(logn+1, vector<set<int>>(n));
+			NonTreeEdge = vector<vector<set<int>>>(logn+1, vector<set<int>>(n));
 		}
+
 		bool isConnected(int u_,int v_){
 			return forest[logn].connected(u_,v_);
 		}
+
 		void insertEdge(int u_, int v_){
 			int u = min(u_,v_), v = max(u_, v_);
 			if(v > vertices || u < 0)	return;
-			if(edge[{u,v}] != 0)	return;	
+			if(edge[{u,v}] != 0)	return;
+
 			edge[{u,v}] = logn;
 			if(!forest[logn].connected(u,v)){
 				TreeEdge[logn][u].insert(v);
 				forest[logn].addEdge(u,v);
-			}
-			else{
+			}else{
 				NonTreeEdge[logn][u].insert(v);
 			}
 		}
 
 		void removeEdge(int u_, int v_){
+			//	Preliminary checks
 			int u = min(u_,v_), v = max(u_,v_);
 			if(v > vertices || u < 0)	return;
+			
+			//	Remove the edge from the edge map
 			int level = edge[{u,v}];
-			edge.erase({u,v}); edge.erase({v,u});
+			edge.erase({u,v});
+
 			if(isTreeEdge(u, v,level)){
 				TreeEdge[level][u].erase(v);
 				for(int i = level; i <= logn; i++){
@@ -70,7 +87,7 @@ class Graph{
 					}
 				}
 				bool FoundReplacementEdge = false;
-				for(int i=level;i<=logn;i++){
+				for(int i = level; i <= logn; i++){
 					for(auto u: sm_tree){
 						for(auto v: NonTreeEdge[i][u]){
 							NonTreeEdge[i][u].erase(v);
@@ -102,11 +119,19 @@ class Graph{
 
 int main(){
 	Graph g(7);
+	g.printState();
 	g.insertEdge(1,6);
-	// g.insertEdge(2,6);
-	// g.insertEdge(1,2);
-	// if(g.isConnected(1,2)){
-	// 	cout<<"lesgo"<<endl;
-	// }
-	return 1;
+	g.printState();
+	g.insertEdge(2,6);
+	g.printState();
+	g.insertEdge(1,2);
+	g.printState();
+	g.removeEdge(1,6);
+	g.printState();
+	g.removeEdge(1,2);
+	g.printState();
+	if(g.isConnected(1,2)){
+		cout<<"lesgo"<<endl;
+	}
+	return 0;
 }

@@ -2,9 +2,6 @@
 #include "SplayForest.cpp"
 using namespace std;
 
-#define RIGHT true
-#define LEFT false
-
 class SpanningForest{
 	private:
 		struct mpNode{
@@ -17,6 +14,14 @@ class SpanningForest{
 	public:
 
 		SpanningForest(){}
+
+		void print(){
+			for(int i = 0; i < vec.size(); i++){
+				t.inorder(t.findBSTRoot(vec[i].first));
+				cout << ", ";
+			}
+			cout << endl;
+		}
 		
 		vector<int> getVertices(int u){
 			TreeNode* r = vec[u].first;
@@ -41,9 +46,7 @@ class SpanningForest{
 		SpanningForest(int n){
 			vec.resize(n);
 			for(int i = 0; i < n; i++){
-				TreeNode* temp = t.insertNode(i);
-				vec[i].first = temp;
-				vec[i].last = temp;
+				vec[i].first = vec[i].last = t.insertNode(i);
 			}
 		}
 
@@ -73,12 +76,13 @@ class SpanningForest{
 			TreeNode* redundant = t.findLeftMost(t.split(vec[v].last, RIGHT));
 			TreeNode* temp2 = t.split(redundant, RIGHT);
 
-			if(redundant = vec[u].last){
+			if(redundant == vec[u].last){
 				vec[u].last = t.findRightMost(temp1);
 			}
 
 			t.merge(temp1, temp2);
 		}
+
 		int getSize(int u){
 			TreeNode* r = t.findBSTRoot(vec[u].first);
 			return r->size;
