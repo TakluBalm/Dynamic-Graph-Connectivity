@@ -2,6 +2,8 @@
 #include "SpanningForest.cpp"
 using namespace std;
 
+#define DEBUG 0
+
 class Graph{
 	private:
 		int vertices;
@@ -40,7 +42,13 @@ class Graph{
 		}
 
 		bool isConnected(int u_,int v_){
-			return forest[logn].connected(u_,v_);
+			bool t = forest[logn].connected(u_,v_);
+			if(DEBUG){
+				cout << "(" << u_ << ", " << v_ << ")";
+				if(t)	cout << " is connected" << endl;
+				else	cout << " is not connected" << endl;
+			}
+			return t;
 		}
 
 		void insertEdge(int u_, int v_){
@@ -54,6 +62,10 @@ class Graph{
 				forest[logn].addEdge(u,v);
 			}else{
 				NonTreeEdge[logn][u].insert(v);
+			}
+
+			if(DEBUG){
+				printState();
 			}
 		}
 
@@ -121,30 +133,42 @@ class Graph{
 						break;
 				}
 			}
-			else{
+			else{     
 				NonTreeEdge[level][u].erase(v);
+			}
+			
+			if(DEBUG){
+				printState();
 			}
 		}
 };
 
 int main(){
-	Graph g(7);
-	g.printState();
-	g.insertEdge(4,5);
-	g.printState();
-	g.insertEdge(2,1);
-	g.printState();
-	g.insertEdge(2,6);
-	g.printState();
-	g.insertEdge(1,5);
-	g.printState();
-	g.removeEdge(1,5);
-	g.printState();
-	if(g.isConnected(1,4)){
-		cout<<"lesgo"<<endl;
+	#ifndef ONLINE_JUDGE
+	freopen ("input.txt", "r", stdin);
+	freopen ("output.txt", "w", stdout);
+	#endif
+	int n;cin>>n;
+	int m;cin>>m;
+	Graph g(n);
+	for(int i=0;i<m;i++){
+		string s;cin>>s;
+		int a,b;cin>>a>>b;
+		a--;b--;
+		if(s=="add"){
+			g.insertEdge(a,b);
+		}
+		else if(s=="rem"){
+			g.removeEdge(a,b);
+		}
+		else{
+			if(g.isConnected(a,b))
+				cout<<"yes"<<endl;
+			else	
+				cout<<"no"<<endl;
+
+		}
 	}
-	else{
-		cout<<"STILL LESGPO"<<endl;
-	}
+
 	return 1;
 }

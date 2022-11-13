@@ -31,15 +31,21 @@ class SpanningForest{
 
 		vector<int> getVertices(int u){
 			TreeNode* r = vec[u].arbiEdge;
+			if(r==NULL)
+				return {u};
 			vector<int> ver;
 		 	r = t.findBSTRoot(r);
 			queue<TreeNode*> q;
 			q.push(r);
+
 			while(!q.empty()){
 				TreeNode* cur = q.front();
 				q.pop();
 				if(vec[cur->ver1].arbiEdge == cur){
 					ver.push_back(cur->ver1);
+				}
+				if(vec[cur->ver2].arbiEdge == cur){
+					ver.push_back(cur->ver2);
 				}
 				if(cur->left!=NULL)
 					q.push(cur->left);
@@ -98,8 +104,7 @@ class SpanningForest{
 			if(hasEdge[u]==false && hasEdge[v] == false){
 				TreeNode* newNode1 = t.insertNode(u,v);
 				TreeNode* newNode2 = t.insertNode(v,u);
-				newNode1->right = newNode2;
-				newNode2->parent = newNode1;
+				t.merge(newNode1, newNode2);
 				mpEdge newMap;
 				newMap.oc1 = newNode1;
 				newMap.oc2 = newNode2;
@@ -140,6 +145,7 @@ class SpanningForest{
 				newMap.valid = true;
 				edgeMp[{u,v}] = newMap;
 				edgeMp[{v,u}] = newMap;
+				vec[newVer].arbiEdge = newNode1;
 				TreeNode* right = t.split(splitting_edg,RIGHT);
 				TreeNode* update1 = t.merge(splitting_edg,newNode1);
 				TreeNode* update2 = t.merge(update1,newNode2);
@@ -189,49 +195,44 @@ class SpanningForest{
 			TreeNode* redun_1 = t.findLeftMost(first_oc);
 			TreeNode* split2 = t.split(redun_1,RIGHT);
 			TreeNode* split3 = t.split(second_oc,RIGHT);
-			TreeNode* repl_c1 = t.findRightMost(split3);
+			TreeNode* repl_c1 = t.findLeftMost(split3);
 			TreeNode* redun_2 = t.findRightMost(second_oc);
 			TreeNode* split4 = t.split(redun_2,LEFT);
-			TreeNode* repl_c2 = t.findLeftMost(split4);
+			TreeNode* repl_c2 = t.findRightMost(split1);
 			TreeNode* merge1 = t.merge(split1,split3); // split1-split3 is Tree1 and split4 is Tree2
 			if(vec[u].arbiEdge == first_oc || vec[u].arbiEdge == second_oc){
-				if(t.findLeftMost(split4)->ver1 == u ){
+				if(first_oc->ver2 == u){
 						vec[u].arbiEdge = t.findLeftMost(split4);
 					}
 				else{
 					vec[u].arbiEdge = NULL;
 					if(repl_c1!=NULL)
-						vec[u].arbiEdge = NULL;
+						vec[u].arbiEdge = repl_c1;
 					else if(repl_c2!=NULL)
 						vec[u].arbiEdge = repl_c2;
 				}
 			}
 			if(vec[v].arbiEdge == first_oc || vec[v].arbiEdge == second_oc){
-			if(t.findLeftMost(split4)->ver1 == v ){
+				if(first_oc->ver2 == v){
 					vec[v].arbiEdge = t.findLeftMost(split4);
 				}
-			else{
-				vec[v].arbiEdge = NULL;
-				if(repl_c1!=NULL)
+				else{
 					vec[v].arbiEdge = NULL;
-				else if(repl_c2!=NULL)
-					vec[v].arbiEdge = repl_c2;
+					if(repl_c1!=NULL)
+						vec[v].arbiEdge = repl_c1;
+					else if(repl_c2!=NULL)
+						vec[v].arbiEdge = repl_c2;
+				}
 			}
-			}
-			
-			// TreeNode* temp1 = t.split(vec[v].first, LEFT);
-			// TreeNode* redundant = t.findLeftMost(t.split(vec[v].last, RIGHT));
-			// TreeNode* temp2 = t.split(redundant, RIGHT);
-
-			// if(redundant = vec[u].last){
-			// 	vec[u].last = t.findRightMost(temp1);
-			// }
-
-			// t.merge(temp1, temp2);
+			if(vec[u].arbiEdge == NULL)
+				hasEdge[u] = false;
+			if(vec[v].arbiEdge == NULL)
+				hasEdge[v] = false;
 		}
 
 		int getSize(int u){
+			if(!hasEdge[u])	return 1;
 			TreeNode* r = t.findBSTRoot(vec[u].arbiEdge);
 			return r->size;
-		}
+		} 
 };

@@ -160,7 +160,7 @@ class SplayForest{
 
 		TreeNode* merge(TreeNode* t1, TreeNode* t2){
 			//	Preliminary Checks
-			if(t1 == NULL || t2 == NULL)	return (t1)?t2:t1;
+			if(t1 == NULL || t2 == NULL)	return (t1 == NULL)?t2:t1;
 
 			//	Merge Step
 			t1 = findRightMost(findBSTRoot(t1));
