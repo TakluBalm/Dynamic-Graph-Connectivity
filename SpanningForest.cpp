@@ -2,9 +2,6 @@
 #include "SplayForest.cpp"
 using namespace std;
 
-#define RIGHT true
-#define LEFT false
-
 class SpanningForest{
 	private:
 		struct mpNode{
@@ -22,6 +19,14 @@ class SpanningForest{
 		};
 		map<pair<int,int>,mpEdge> edgeMp;
 		SpanningForest(){}
+
+		void print(){
+			for(int i = 0; i < vec.size(); i++){
+				t.inorder(t.findBSTRoot(vec[i].arbiEdge));
+				cout << ", ";
+			}
+			cout << endl;
+		}
 		
 
 		void inorder(TreeNode* r){
@@ -206,6 +211,7 @@ class SpanningForest{
 
 			// t.merge(temp1, temp2);
 		}
+
 		int getSize(int u){
 			TreeNode* r = t.findBSTRoot(vec[u].arbiEdge);
 			return r->size;
