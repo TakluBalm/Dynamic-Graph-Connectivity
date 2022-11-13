@@ -78,19 +78,26 @@ class Graph{
 					tv = v;
 				vector<int> sm_tree = forest[level].getVertices(tv);
 				// Pushing the small_tree tv one level
+				set<int> ::iterator itr;
 				for(auto u: sm_tree){
-					for(auto v: TreeEdge[level][u]){
-						TreeEdge[level][u].erase(v);
+					vector<int> ToDelete;
+					for(itr = TreeEdge[level][u].begin();itr!=TreeEdge[level][u].end();itr++){
+						int v = *itr;
+						ToDelete.push_back(v);
 						forest[level-1].addEdge(u,v);
 						TreeEdge[level-1][u].insert(v);
 						edge[{u,v}] = level-1;
+					}
+					for(auto i: ToDelete){
+						TreeEdge[level][u].erase(i);
 					}
 				}
 				bool FoundReplacementEdge = false;
 				for(int i = level; i <= logn; i++){
 					for(auto u: sm_tree){
+						vector<int> toDelete;
 						for(auto v: NonTreeEdge[i][u]){
-							NonTreeEdge[i][u].erase(v);
+							toDelete.push_back(v);
 							if(forest[i].connected(u,v)){ // edge is pushed one level down
 								NonTreeEdge[i-1][u].insert(v);
 								edge[{u,v}] = i-1;
@@ -104,6 +111,9 @@ class Graph{
 								break;
 							}
 						}
+						for(auto v: toDelete){
+							TreeEdge[i][u].erase(v);
+						}
 						if(FoundReplacementEdge)
 							break;
 					}
@@ -115,20 +125,21 @@ class Graph{
 				NonTreeEdge[level][u].erase(v);
 			}
 		}
-		void inorder(int u){
-			forest[logn].temp(u);
-		}
 };
 
 int main(){
 	Graph g(7);
+	g.printState();
 	g.insertEdge(4,5);
+	g.printState();
 	g.insertEdge(2,1);
+	g.printState();
 	g.insertEdge(2,6);
-	g.inorder(1);
-	g.inorder(4);
-	g.insertEdge(5,1);
-	g.inorder(1);
+	g.printState();
+	g.insertEdge(1,5);
+	g.printState();
+	g.removeEdge(1,5);
+	g.printState();
 	if(g.isConnected(1,4)){
 		cout<<"lesgo"<<endl;
 	}

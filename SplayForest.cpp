@@ -132,7 +132,7 @@ class SplayForest{
 			if(t == NULL)	return;
 
 			inorder(t->left);
-			cout << t->ver1 << ", " << t->ver2;
+			cout << t->ver1;
 			inorder(t->right);
 		}
 
