@@ -67,10 +67,14 @@ int main(){
 			}
 		}
 	}
-
-	cerr << "Updation Time: " << updation_time << endl;
-	cerr << "Query Time   : " << query_time << endl;
-	cerr << "Preprocessing: " << prep_time << endl;
-	cerr << "IO Time      : " << io_time << endl;
-	cerr << "Total time   : " << updation_time + query_time << endl;
+	ofstream updateFile,queryFile;
+	queryFile.open("brute_query.txt",ios::app);
+	updateFile.open("brute_update.txt",ios::app);
+	updateFile<<updation_time<<endl;
+	queryFile<<query_time<<endl;
+	// cerr << "Updation Time: " << updation_time << endl;
+	// cerr << "Query Time   : " << query_time << endl;
+	// cerr << "Preprocessing: " << prep_time << endl;
+	// cerr << "IO Time      : " << io_time << endl;
+	// cerr << "Total time   : " << updation_time + query_time << endl;
 }

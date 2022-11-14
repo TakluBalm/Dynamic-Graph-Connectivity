@@ -16,16 +16,14 @@ lin =0
 hasError = False
 while l1 != '':
 	if(l1 != l2):
-		print("Expected ", l1, " got ", l2)
-		print(con_check[lin])
-		cnt += 1
 		hasError = True
+		break
 	lin+=1
 	l1 = f1.readline()
 	l2 = f2.readline()
 
 if hasError:
-	print("Total ", cnt, " mistakes")
+	print("Error")
 	exit(1)
 else:
 	exit(0)

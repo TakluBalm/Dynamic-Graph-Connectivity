@@ -27,17 +27,19 @@ class Graph{
 			// }
 			// cout << endl;
 			for(int i=logn;i>=0;i--){
-				cout<<"level "<<i<<" Tree Edges ";
+				cout<<i<<"T ";
 				for(int u=0;u<vertices;u++){
 					for(auto v: TreeEdge[i][u]){
-						cout<<"( "<<u+1<<","<<v+1<<" )"<<" ";
+						if(u<v)
+						cout<<"("<<u+1<<", "<<v+1<<")"<<"; ";
 					}
 				}
 				cout<<endl;
-				cout<<"level "<<i<<" Non-Tree Edges ";
+				cout<<i<<"NT ";
 				for(int u=0;u<vertices;u++){
 					for(auto v: NonTreeEdge[i][u]){
-						cout<<"( "<<u+1<<","<<v+1<<" )"<<" ";
+						if(u<v)
+						cout<<"("<<u+1<<", "<<v+1<<")"<<"; ";
 					}
 				}
 				cout<<endl;
@@ -89,10 +91,6 @@ class Graph{
 			}else{
 				NonTreeEdge[logn][u].insert(v);
 				NonTreeEdge[logn][v].insert(u);
-			}
-
-			if(DEBUG){
-				printState();
 			}
 
 			if(DEBUG){
@@ -194,9 +192,6 @@ class Graph{
 				printState();
 			}
 			
-			if(DEBUG){
-				printState();
-			}
 		}
 };
 
@@ -254,12 +249,16 @@ int main(){
 			}
 		}
 	}
-
-	cerr << "Updation Time: " << updation_time << endl;
-	cerr << "Query Time   : " << query_time << endl;
-	cerr << "Preprocessing: " << prep_time << endl;
-	cerr << "IO Time      : " << io_time << endl;
-	cerr << "Total time   : " << updation_time + query_time << endl;
+	ofstream updateFile,queryFile;
+	queryFile.open("graph_query.txt",ios::app);
+	updateFile.open("graph_update.txt",ios::app);
+	updateFile<<updation_time<<endl;
+	queryFile<<query_time<<endl;
+	// cerr << "Updation Time: " << updation_time << endl;
+	// cerr << "Query Time   : " << query_time << endl;
+	// cerr << "Preprocessing: " << prep_time << endl;
+	// cerr << "IO Time      : " << io_time << endl;
+	// cerr << "Total time   : " << updation_time + query_time << endl;
 
 	return 0;
 }

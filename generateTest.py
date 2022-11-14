@@ -1,13 +1,25 @@
 import random
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("ver", help="display a square of a given number",
+                    type=int)
+args = parser.parse_args()
+V = args.ver
+# V = 10
+ops = 1000000
+# ops = 500
+
 
 f = open("test.txt", "w")
-
-V = random.randint(100, 5000)
-# V = 10
-ops = random.randint(100, V*V)
-# ops = 500
 f.write(f'{V} {ops}\n')
-
+f_graph_u = open("graph_update.txt","a")
+f_graph_u.write("ver" + str(V) + "\n")
+f_graph_q = open("graph_query.txt","a")
+f_graph_q.write("ver" + str(V) + "\n")
+f_brute_u = open("brute_update.txt","a")
+f_brute_u.write("ver" + str(V) + "\n")
+f_brute_q = open("brute_query.txt","a")
+f_brute_q.write("ver" + str(V) + "\n")
 print(f'V = {V}, ops = {ops}')
 
 mp = set()
