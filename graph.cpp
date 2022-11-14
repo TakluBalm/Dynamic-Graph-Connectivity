@@ -61,7 +61,11 @@ class Graph{
 		bool isConnected(int u_,int v_){
 			bool t = forest[logn].connected(u_,v_);
 			if(DEBUG){
+<<<<<<< HEAD
 				cout << "(" << u_ +1<< ", " << v_ +1<< ")";
+=======
+				cout << "(" << u_ << ", " << v_ << ")";
+>>>>>>> 588d1ed3346d6ee351e12f3d0fdd7ae280eaf3cc
 				if(t)	cout << " is connected" << endl;
 				else	cout << " is not connected" << endl;
 			}
@@ -89,6 +93,10 @@ class Graph{
 			}else{
 				NonTreeEdge[logn][u].insert(v);
 				NonTreeEdge[logn][v].insert(u);
+			}
+
+			if(DEBUG){
+				printState();
 			}
 
 			if(DEBUG){
@@ -182,10 +190,18 @@ class Graph{
 					if(FoundReplacementEdge)	break;
 				}
 			}
+<<<<<<< HEAD
 			else{ 
+=======
+			else{     
+>>>>>>> 588d1ed3346d6ee351e12f3d0fdd7ae280eaf3cc
 				NonTreeEdge[level][u].erase(v);
 				NonTreeEdge[level][v].erase(u);
 			}
+			if(DEBUG){
+				printState();
+			}
+			
 			if(DEBUG){
 				printState();
 			}
@@ -193,6 +209,7 @@ class Graph{
 };
 
 int main(){
+<<<<<<< HEAD
 	freopen ("test.txt", "r", stdin);
 	freopen ("graph_output.txt", "w", stdout);
 
@@ -254,4 +271,33 @@ int main(){
 	cerr << "Total time   : " << updation_time + query_time << endl;
 
 	return 0;
+=======
+	#ifndef ONLINE_JUDGE
+	freopen ("input.txt", "r", stdin);
+	freopen ("output.txt", "w", stdout);
+	#endif
+	int n;cin>>n;
+	int m;cin>>m;
+	Graph g(n);
+	for(int i=0;i<m;i++){
+		string s;cin>>s;
+		int a,b;cin>>a>>b;
+		a--;b--;
+		if(s=="add"){
+			g.insertEdge(a,b);
+		}
+		else if(s=="rem"){
+			g.removeEdge(a,b);
+		}
+		else{
+			if(g.isConnected(a,b))
+				cout<<"yes"<<endl;
+			else	
+				cout<<"no"<<endl;
+
+		}
+	}
+
+	return 1;
+>>>>>>> 588d1ed3346d6ee351e12f3d0fdd7ae280eaf3cc
 }
