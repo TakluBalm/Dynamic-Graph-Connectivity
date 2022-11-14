@@ -106,7 +106,12 @@ class SplayForest{
 		SplayForest(){};
 
 		TreeNode* insertNode(int u,int v){
-			return new TreeNode(u,v);
+			TreeNode* p = new TreeNode(u,v);
+			if(p == NULL){
+				cerr << "Ran out of memory" << endl;
+				exit(1);
+			}
+			return p;
 		}
 
 		TreeNode* getNext(TreeNode* t){
@@ -132,7 +137,7 @@ class SplayForest{
 			if(t == NULL)	return;
 
 			inorder(t->left);
-			cout << t->ver1;
+			cout << t->ver1+1;
 			inorder(t->right);
 		}
 
@@ -160,7 +165,7 @@ class SplayForest{
 
 		TreeNode* merge(TreeNode* t1, TreeNode* t2){
 			//	Preliminary Checks
-			if(t1 == NULL || t2 == NULL)	return (t1)?t2:t1;
+			if(t1 == NULL || t2 == NULL)	return (t1 == NULL)?t2:t1;
 
 			//	Merge Step
 			t1 = findRightMost(findBSTRoot(t1));
