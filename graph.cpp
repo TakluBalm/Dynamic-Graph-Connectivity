@@ -2,7 +2,7 @@
 #include "SpanningForest.cpp"
 using namespace std;
 
-#define DEBUG 0
+#define DEBUG 1
 
 class Graph{
 	private:
